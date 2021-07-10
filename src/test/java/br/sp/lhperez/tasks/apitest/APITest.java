@@ -32,7 +32,7 @@ public class APITest {
 		RestAssured.given()
 			.log().all()
 			.body("{\r\n"
-					+ "	\"task\": \"Teste viaa api\",\r\n"
+					+ "	\"task\": \"Teste via api\",\r\n"
 					+ "	\"dueDate\": \"2030-12-30\"\r\n"
 					+ "}")
 			.contentType(ContentType.JSON)
@@ -51,7 +51,7 @@ public class APITest {
 		RestAssured.given()
 			.log().all()
 			.body("{\r\n"
-					+ "	\"task\": \"Teste viaa api\",\r\n"
+					+ "	\"task\": \"Teste via api\",\r\n"
 					+ "	\"dueDate\": \"2010-12-30\"\r\n"
 					+ "}")
 			.contentType(ContentType.JSON)
@@ -64,7 +64,7 @@ public class APITest {
 		;
 	}
 
-}
+
 
 /*
 {
@@ -72,3 +72,36 @@ public class APITest {
 	"dueDate": "2020-12-30"
 }
 */
+
+
+	@Test
+	public void deveRemoverTarefaComSucesso() {
+		//inserir
+		Integer id = RestAssured.given()
+			.log().all()
+			.body("{\r\n"
+					+ "	\"task\": \"Tarefa Teste para remoção - Teste via api\",\r\n"
+					+ "	\"dueDate\": \"2030-12-30\"\r\n"
+					+ "}")
+			.contentType(ContentType.JSON)
+		.when()
+			.post("/todo")
+		.then()
+			.log().all()
+			.statusCode(201)	
+			.extract().path("id") //extra o id retornado na resposta para ser usado pela exclusão
+		;
+		
+		System.out.println(id);
+		
+		//remover
+		RestAssured.given()
+			.log().all()
+		.when()
+			.delete("/todo/"+ id)
+		.then()
+			.log().all()
+			.statusCode(204)
+		;
+	}
+}
